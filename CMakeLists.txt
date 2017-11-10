@@ -1,0 +1,46 @@
+cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+
+project(CG1-raytracer)
+
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "limited config" FORCE)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(ASSIGNMENT_LIBRARIES)
+# search for pkg-config
+include (FindPkgConfig)
+if (NOT PKG_CONFIG_FOUND)
+    message (FATAL_ERROR "pkg-config not found")
+endif ()
+# check for libpng
+pkg_check_modules (LIBPNG libpng16 REQUIRED)
+if (LIBPNG_FOUND)
+    include_directories(${LIBPNG_INCLUDE_DIRS})
+    link_directories (${LIBPNG_LIBRARY_DIRS})
+    add_definitions(${LIBPNG_DEFINITIONS})
+    set(ASSIGNMENT_LIBRARIES ${ASSIGNMENT_LIBRARIES} ${LIBPNG_LIBRARIES})
+elseif(WIN32 AND MSVC)
+    add_definitions(-DGDIPLUS_SUPPORT)
+    set(ASSIGNMENT_LIBRARIES ${ASSIGNMENT_LIBRARIES} gdiplus)
+else()
+    find_package(PNG)
+    message(FATAL_ERROR "libpng-dev is required to build the CG1-raytracer.\nPlease install libpng-dev.")
+endif ()
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+set(ALL_ASSIGNMENT_SOURCES)
+
+file(GLOB ASSIGNMENT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/assignment-*.cmake")
+foreach(f ${ASSIGNMENT_FILES})
+    get_filename_component(_fname ${f} NAME_WE)
+    message(STATUS "Found files of ${_fname}")
+    include(${f})
+    foreach(_s ${ASSIGNMENT_SOURCES})
+        message(STATUS " - ${_s}")
+    endforeach()
+    list(APPEND ALL_ASSIGNMENT_SOURCES ${ASSIGNMENT_SOURCES})
+endforeach()
+
+add_executable(cgray ${ALL_ASSIGNMENT_SOURCES} main/main.cpp)
+target_link_libraries(cgray ${ASSIGNMENT_LIBRARIES})
+set_target_properties(cgray PROPERTIES DEBUG_POSTFIX "d")
