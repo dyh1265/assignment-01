@@ -5,15 +5,15 @@
 #include <rt/ray.h>
 
 namespace rt {
-    OrthographicCamera::OrthographicCamera( const Point& center, const Vector& forward, const Vector& up, float scaleX, float scaleY ):center(center),up(up),scaleX(scaleX),scaleY(scaleY) {
+    OrthographicCamera::OrthographicCamera( const Point& center, const Vector& forward, const Vector& up, float scaleX, float scaleY ):center(center),up(up),scaleX(scaleX/2.f),scaleY(scaleY/2.f) {
         
-        v = orthogonalize(up, forward).normalize();
+        imgY = cross(cross(up, forward),forward).normalize();
         this->forward = forward.normalize();
-        u = cross(this->forward, v);
+        imgX = cross(this->forward, imgY);
     }
     
     Ray OrthographicCamera::getPrimaryRay( float x, float y ) const {
-        Point o = center + u * x * scaleX - v * y * scaleY;
+        Point o = center + imgX * x * scaleX - imgY * y * scaleY;
         Ray r(o, forward);
         return r;
     }

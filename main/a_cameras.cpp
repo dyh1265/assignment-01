@@ -38,6 +38,7 @@ RGBColor a2computeColor(const Ray& r) {
 void a_cameras() {
     Image img(800, 800);
     Image low(128, 128);
+    
     EnvironmentCamera ecam(Point(0, 1, 0),
                            Vector(0.1, 0.1, 1), Vector(0, 0, 1),
                           120, 180);
@@ -46,7 +47,7 @@ void a_cameras() {
     r1e.test_render2(low);
     img.writePNG("aenv.png");
     low.writePNG("aenv-low.png");
-    
+
     FishEyeCamera fcam(Point(0, 1, 0),
                   Vector(-50, 15, 10), Vector(2, 2.0, 2),
                   120.0);
@@ -55,7 +56,7 @@ void a_cameras() {
     rf.test_render2(low);
     img.writePNG("afish.png");
     low.writePNG("afish-low.png");
-    
+
     PerspectiveCamera pcam(Point(0, 0, 0), Vector(1, 0, 0.1), Vector(0, 0, 1), pi/3, pi/3);
     Renderer r1(&pcam,0);
     r1.test_render2(img);

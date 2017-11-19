@@ -24,8 +24,8 @@ public:
 
     virtual Ray getPrimaryRay(float x, float y) const;
     private:
-        Vector u;
-        Vector v;
+        Vector imgX;
+        Vector imgY;
         float tanTheta;
         float tanPhi;
         float aspectRatio;

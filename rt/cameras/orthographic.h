@@ -25,8 +25,8 @@ public:
     virtual Ray getPrimaryRay(float x, float y) const;
 private:
     //Image coordinates
-    Vector u;
-    Vector v;
+    Vector imgX;
+    Vector imgY;
     
 };
 

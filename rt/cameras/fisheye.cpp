@@ -10,9 +10,9 @@ namespace rt {
                   const Vector& up,
                                  float psiMax):center(center), forward(forward), up(up), psiMax(psiMax){
         /* Orthogonalize vectors */
-        v = orthogonalize(up, forward).normalize();
+        imgY = cross(cross(up, forward),forward).normalize();;
         this->forward = forward.normalize();
-        u = cross(this->forward, v);
+        imgX = cross(this->forward, imgY);
     }
 
     Ray FishEyeCamera::getPrimaryRay(float x, float y) const  {
@@ -25,12 +25,12 @@ namespace rt {
             float cosPsi = cos(psi);
             float sinAlpha = y / rad;
             float cosAlpha = x / rad;
-            Vector d = sinPsi * cosAlpha * u + sinPsi * sinAlpha * v  - cosPsi * forward;
+            Vector d = sinPsi * cosAlpha * imgX + sinPsi * sinAlpha * imgY  - cosPsi * forward;
             d = d.normalize();
             Ray r(center, d);
             return r;
         } else {
-            return Ray(center , Vector::rep(0.f));
+            return Ray(center, Vector::rep(-9.f));
         }
     }
 }

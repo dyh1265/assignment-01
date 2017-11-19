@@ -11,9 +11,9 @@ namespace rt{
                                  const Vector& up,
                                  float psiMax, float lambdaMax):center(center), forward(forward), up(up), psiMax(psiMax), lambdaMax(lambdaMax){
         /* Orthogonalize vectors */
-        v = orthogonalize(up, forward).normalize();
+        imgY = orthogonalize(up, forward).normalize();
         this->forward = forward.normalize();
-        u = cross(this->forward, v);
+        imgX = cross(this->forward, imgY);
    }
     
     Ray EnvironmentCamera::getPrimaryRay(float x, float y) const{
@@ -27,7 +27,9 @@ namespace rt{
         float cosPhi = cos(phi);
         float sinTheta = sin(theta);
         float cosTheta = cos(theta);
-        Vector dir = sinTheta * sinPhi * u + cosTheta * v + sinTheta * cosPhi * forward;
+        Vector dir = sinTheta * sinPhi * imgX + cosTheta * imgY + sinTheta * cosPhi * forward;
         return Ray(center, dir);
     }
 }
+
+

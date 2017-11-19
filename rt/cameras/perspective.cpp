@@ -16,13 +16,13 @@ namespace rt {
         
         /* Orthogonalize vectors */
         this->forward = forward.normalize();
-        u = cross(-up, this->forward);
-        v = cross(this->forward, u).normalize();
+        imgX = cross(this->forward,up);
+        imgY = cross(this->forward, imgX).normalize();
     }
     
     /*  Find pixel center and compute ray through it. */
     Ray PerspectiveCamera::getPrimaryRay( float x, float y ) const {
-        Vector d = forward + u * tanTheta * aspectRatio * x + v * tanTheta * y;
+        Vector d = forward + imgX * tanTheta * aspectRatio * x + imgY * tanTheta * y;
         d = d.normalize();
         Ray r(center, d);
         return r;

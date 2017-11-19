@@ -20,8 +20,8 @@ namespace rt {
                       );
         virtual Ray getPrimaryRay(float x, float y) const;
     private:
-        Vector u;
-        Vector v;
+        Vector imgX;
+        Vector imgY;
     };
 }
 #endif /* fisheye_h */
